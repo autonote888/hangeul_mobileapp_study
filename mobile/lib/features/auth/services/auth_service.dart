@@ -151,20 +151,31 @@ class AuthService {
     }
   }
 
-  /// Mengakhiri sesi OIDC di Keycloak dan menghapus seluruh token dari Secure Storage
+  /// Mengakhiri sesi OIDC di Keycloak via REST API (tanpa membuka browser eksternal)
+  /// dan menghapus seluruh token dari Secure Storage agar kembali mulus ke halaman SignInPage.
   Future<void> logout() async {
-    final idToken = await _storageService.getIdToken();
+    final refreshToken = await _storageService.getRefreshToken();
     try {
-      if (idToken != null) {
-        await _appAuth.endSession(
-          EndSessionRequest(
-            idTokenHint: idToken,
-            postLogoutRedirectUrl: AppConfig.postLogoutRedirectUrl,
-            discoveryUrl: AppConfig.discoveryUrl,
-            allowInsecureConnections: true,
+      if (refreshToken != null && refreshToken.isNotEmpty) {
+        final dio = Dio(
+          BaseOptions(
+            connectTimeout: const Duration(seconds: 5),
+            receiveTimeout: const Duration(seconds: 5),
+          ),
+        );
+        await dio.post(
+          '${AppConfig.issuer}/protocol/openid-connect/logout',
+          data: {
+            'client_id': AppConfig.clientId,
+            'refresh_token': refreshToken,
+          },
+          options: Options(
+            contentType: Headers.formUrlEncodedContentType,
           ),
         );
       }
+    } catch (_) {
+      // Abaikan jika jaringan offline, tetap bersihkan token lokal
     } finally {
       await _storageService.clearTokens();
     }

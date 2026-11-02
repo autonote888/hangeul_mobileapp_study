@@ -17,7 +17,7 @@ void main() {
       create: (_) => AuthCubit(
         authService: authService,
         storageService: storageService,
-      )..checkExistingSession(),
+      ),
       child: const KeycloakFlutterApp(),
     ),
   );

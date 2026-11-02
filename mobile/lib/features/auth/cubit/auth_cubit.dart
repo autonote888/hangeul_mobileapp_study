@@ -135,9 +135,10 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> signOut() async {
-    emit(AuthLoading());
     await _authService.logout();
-    emit(const AuthUnauthenticated());
+    emit(const AuthUnauthenticated(
+      message: 'Anda telah berhasil keluar (Logout).',
+    ));
   }
 }
 
