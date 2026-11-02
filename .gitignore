@@ -1,0 +1,54 @@
+# ============================================================================
+# 1. KREDENSIAL, USERNAME, PASSWORD & ENVIRONMENT SECRETS
+# ============================================================================
+.env
+.env.*
+!.env.example
+*.env
+*secret*
+*credential*
+*password*
+
+# File konfigurasi Docker & Script Launcher yang mengandung username/password
+docker-compose.yml
+docker-compose.override.yml
+start-all.bat
+stop-all.bat
+run-mobile.bat
+
+# ============================================================================
+# 2. KEYSTORE ANDROID & SERTIFIKAT KEAMANAN (PRIVATE KEYS)
+# ============================================================================
+*.jks
+*.keystore
+key.properties
+*.pem
+*.key
+*.p12
+*.crt
+google-services.json
+GoogleService-Info.plist
+
+# ============================================================================
+# 3. DATA DATABASE LOKAL (POSTGRESQL & PGADMIN)
+# ============================================================================
+postgres_data/
+pgadmin_data/
+*.sql
+*.sqlite
+*.db
+
+# ============================================================================
+# 4. BUILD ARTIFACTS FLUTTER & GOLANG
+# ============================================================================
+mobile/build/
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/android/.gradle/
+mobile/android/local.properties
+backend/bin/
+backend/*.exe
+.DS_Store
+Thumbs.db
+
