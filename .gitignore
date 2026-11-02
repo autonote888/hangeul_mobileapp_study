@@ -50,6 +50,7 @@ mobile/android/.gradle/
 mobile/android/local.properties
 backend/bin/
 backend/*.exe
+.idea/
 .DS_Store
 Thumbs.db
 

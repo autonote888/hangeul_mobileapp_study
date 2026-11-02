@@ -38,19 +38,41 @@ class KeycloakFlutterApp extends StatelessWidget {
       home: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthUnauthenticated && state.message != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message!)),
-            );
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  duration: const Duration(milliseconds: 1600),
+                  behavior: SnackBarBehavior.floating,
+                  content: Text(state.message!),
+                ),
+              );
           }
         },
         builder: (context, state) {
-          if (state is AuthAuthenticated) {
-            return HangeulHomePage(
-              userEmail: (state.profile['email'] as String?) ??
-                  'student@saturnus.app',
-            );
-          }
-          return const SignInPage();
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 220),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            transitionBuilder: (child, animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.96, end: 1.0).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+            child: state is AuthAuthenticated
+                ? HangeulHomePage(
+                    key: const ValueKey('hangeul_home_page'),
+                    userEmail: (state.profile['email'] as String?) ??
+                        'student@saturnus.app',
+                  )
+                : const SignInPage(
+                    key: ValueKey('sign_in_page'),
+                  ),
+          );
         },
       ),
     );

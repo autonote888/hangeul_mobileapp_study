@@ -69,8 +69,8 @@ class AuthService {
   }) async {
     final dio = Dio(
       BaseOptions(
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
+        connectTimeout: const Duration(milliseconds: 1800),
+        receiveTimeout: const Duration(milliseconds: 1800),
       ),
     );
 
@@ -159,8 +159,8 @@ class AuthService {
       if (refreshToken != null && refreshToken.isNotEmpty) {
         final dio = Dio(
           BaseOptions(
-            connectTimeout: const Duration(seconds: 5),
-            receiveTimeout: const Duration(seconds: 5),
+            connectTimeout: const Duration(milliseconds: 1200),
+            receiveTimeout: const Duration(milliseconds: 1200),
           ),
         );
         await dio.post(

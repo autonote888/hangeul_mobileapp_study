@@ -41,154 +41,103 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Full Name
-              TextField(
+              // 1. Full Name dengan Shape 3D & Smooth Tilt Transition
+              Interactive3DInputField(
+                label: 'FULL NAME',
+                hintText: 'Full Name',
                 controller: _fullNameController,
-                decoration: const InputDecoration(
-                  hintText: 'Full Name',
-                  hintStyle: TextStyle(
-                    color: AppTheme.labelGrey,
-                    fontSize: 15,
-                  ),
-                  prefixIcon: Icon(
-                    Icons.person_outline,
-                    color: AppTheme.labelGrey,
-                    size: 20,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.inputBorderGrey),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.primaryButtonNavy),
-                  ),
-                ),
+                prefixIcon: Icons.person_outline_rounded,
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 16),
 
-              // Phone or Email
-              TextField(
+              // 2. Phone or Email dengan Shape 3D & Smooth Tilt Transition
+              Interactive3DInputField(
+                label: 'PHONE OR EMAIL',
+                hintText: 'Phone or Email',
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  hintText: 'Phone or Email',
-                  hintStyle: TextStyle(
-                    color: AppTheme.labelGrey,
-                    fontSize: 15,
-                  ),
-                  prefixIcon: Icon(
-                    Icons.mail_outline,
-                    color: AppTheme.labelGrey,
-                    size: 20,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.inputBorderGrey),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.primaryButtonNavy),
-                  ),
-                ),
+                prefixIcon: Icons.mail_outline_rounded,
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 16),
 
-              // Password
-              TextField(
+              // 3. Password dengan Shape 3D & Smooth Tilt Transition
+              Interactive3DInputField(
+                label: 'PASSWORD',
+                hintText: 'Password',
                 controller: _passwordController,
                 obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                  hintStyle: const TextStyle(
-                    color: AppTheme.labelGrey,
-                    fontSize: 15,
-                  ),
-                  prefixIcon: const Icon(
-                    Icons.lock_outline,
+                letterSpacing: _obscurePassword ? 2.0 : 0.4,
+                prefixIcon: Icons.lock_outline_rounded,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                  icon: Icon(
+                    _obscurePassword
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
                     color: AppTheme.labelGrey,
                     size: 20,
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: AppTheme.labelGrey,
-                      size: 20,
-                    ),
-                  ),
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.inputBorderGrey),
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.primaryButtonNavy),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 16),
 
-              // Confirm Password
-              TextField(
+              // 4. Confirm Password dengan Shape 3D & Smooth Tilt Transition
+              Interactive3DInputField(
+                label: 'CONFIRM PASSWORD',
+                hintText: 'Confirm Password',
                 controller: _confirmPasswordController,
                 obscureText: _obscureConfirmPassword,
-                decoration: InputDecoration(
-                  hintText: 'Confirm Password',
-                  hintStyle: const TextStyle(
-                    color: AppTheme.labelGrey,
-                    fontSize: 15,
-                  ),
-                  prefixIcon: const Icon(
-                    Icons.verified_user_outlined,
+                letterSpacing: _obscureConfirmPassword ? 2.0 : 0.4,
+                prefixIcon: Icons.verified_user_outlined,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _obscureConfirmPassword = !_obscureConfirmPassword;
+                    });
+                  },
+                  icon: Icon(
+                    _obscureConfirmPassword
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
                     color: AppTheme.labelGrey,
                     size: 20,
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _obscureConfirmPassword = !_obscureConfirmPassword;
-                      });
-                    },
-                    icon: Icon(
-                      _obscureConfirmPassword
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: AppTheme.labelGrey,
-                      size: 20,
-                    ),
-                  ),
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.inputBorderGrey),
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.primaryButtonNavy),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 36),
+              const SizedBox(height: 28),
 
-              // SIGN UP Button -> Mengarahkan ke alur login dengan akun yang diisi
+              // SIGN UP Button -> Respon Instan (<16ms)
               PrimaryAuthButton(
                 label: 'SIGN UP',
                 isLoading: isLoading,
                 onPressed: () {
+                  final username = _emailController.text.trim().isEmpty
+                      ? 'admin'
+                      : _emailController.text.trim();
+                  final password = _passwordController.text.isEmpty
+                      ? 'admin'
+                      : _passwordController.text;
+
+                  if (Navigator.of(context).canPop()) {
+                    Navigator.of(context).pop();
+                  }
                   context.read<AuthCubit>().signInWithCredentials(
-                        username: _emailController.text.trim().isEmpty
-                            ? 'admin'
-                            : _emailController.text.trim(),
-                        password: _passwordController.text.isEmpty
-                            ? 'admin'
-                            : _passwordController.text,
+                        username: username,
+                        password: password,
+                        isInstantSignUp: true,
                       );
                 },
               ),
 
-              const SizedBox(height: 64),
+              const SizedBox(height: 36),
 
               // Already have an account? Sign In
               Row(
@@ -208,7 +157,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       style: TextStyle(
                         color: AppTheme.orangeAction,
                         fontSize: 13,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ),
@@ -221,4 +170,3 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
-

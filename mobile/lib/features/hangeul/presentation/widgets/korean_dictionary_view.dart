@@ -101,47 +101,21 @@ class _KoreanDictionaryViewState extends State<KoreanDictionaryView> {
               ),
               const SizedBox(height: 12),
 
-              // Input Search Bar
-              TextField(
+              // Input Search Bar dengan Shape 3D & Smooth Tilt Transition saat digerakkan
+              Interactive3DInputField(
                 controller: _searchController,
                 onChanged: (val) => setState(() => _searchQuery = val),
-                decoration: InputDecoration(
-                  hintText: 'Cari Hangeul, Romaji, atau Arti Indonesia...',
-                  hintStyle: const TextStyle(
-                    fontSize: 13.5,
-                    color: Color(0xFF94A3B8),
-                  ),
-                  prefixIcon: const Icon(
-                    Icons.search_rounded,
-                    color: AppTheme.primaryButtonNavy,
-                  ),
-                  suffixIcon: _searchQuery.isNotEmpty
-                      ? IconButton(
-                          onPressed: () {
-                            _searchController.clear();
-                            setState(() => _searchQuery = '');
-                          },
-                          icon: const Icon(Icons.clear, size: 18),
-                        )
-                      : null,
-                  filled: true,
-                  fillColor: const Color(0xFFF8FAFC),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                      color: AppTheme.primaryButtonNavy,
-                      width: 1.5,
-                    ),
-                  ),
-                ),
+                hintText: 'Cari Hangeul, Romaji, atau Arti Indonesia...',
+                prefixIcon: Icons.search_rounded,
+                suffixIcon: _searchQuery.isNotEmpty
+                    ? IconButton(
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() => _searchQuery = '');
+                        },
+                        icon: const Icon(Icons.clear, size: 18),
+                      )
+                    : null,
               ),
 
               const SizedBox(height: 12),

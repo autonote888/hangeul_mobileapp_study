@@ -89,8 +89,8 @@ class DioClient {
   }) {
     final baseOptions = BaseOptions(
       baseUrl: AppConfig.backendBaseUrl,
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+      connectTimeout: const Duration(milliseconds: 1200),
+      receiveTimeout: const Duration(milliseconds: 1500),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

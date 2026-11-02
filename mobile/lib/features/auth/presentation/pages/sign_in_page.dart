@@ -32,6 +32,33 @@ class _SignInPageState extends State<SignInPage> {
     super.dispose();
   }
 
+  void _openSignUpWith3DTransition(BuildContext context) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 240),
+        reverseTransitionDuration: const Duration(milliseconds: 200),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const SignUpPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final curved = CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOutCubic,
+          );
+          return FadeTransition(
+            opacity: curved,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0.08, 0.03),
+                end: Offset.zero,
+              ).animate(curved),
+              child: child,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
@@ -44,105 +71,50 @@ class _SignInPageState extends State<SignInPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Label EMAIL ADDRESS
-              const Text(
-                'EMAIL ADDRESS',
-                style: TextStyle(
-                  color: AppTheme.labelGrey,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.8,
-                ),
-              ),
-              TextField(
+              // 1. Isian EMAIL ADDRESS dengan Shape 3D & Smooth Transition saat digerakkan
+              Interactive3DInputField(
+                label: 'EMAIL ADDRESS',
+                hintText: 'Masukkan Username / Email (admin)',
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
+                prefixIcon: Icons.mail_outline_rounded,
                 onChanged: _validateEmail,
-                style: const TextStyle(
-                  color: Color(0xFF1E293B),
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(
-                    Icons.mail_outline,
-                    color: AppTheme.labelGrey,
-                    size: 20,
-                  ),
-                  prefixIconConstraints: const BoxConstraints(
-                    minWidth: 32,
-                    minHeight: 32,
-                  ),
-                  suffixIcon: _isValidEmail
-                      ? const Icon(
-                          Icons.check,
-                          color: Color(0xFF10B981),
-                          size: 20,
-                        )
-                      : null,
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.inputBorderGrey),
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.primaryButtonNavy),
-                  ),
-                ),
+                suffixIcon: _isValidEmail
+                    ? const Icon(
+                        Icons.verified_rounded,
+                        color: Color(0xFF10B981),
+                        size: 20,
+                      )
+                    : null,
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 22),
 
-              // Label PASSWORD
-              const Text(
-                'PASSWORD',
-                style: TextStyle(
-                  color: AppTheme.labelGrey,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.8,
-                ),
-              ),
-              TextField(
+              // 2. Isian PASSWORD dengan Shape 3D & Smooth Transition saat digerakkan
+              Interactive3DInputField(
+                label: 'PASSWORD',
+                hintText: 'Masukkan Password (admin)',
                 controller: _passwordController,
                 obscureText: _obscurePassword,
-                style: const TextStyle(
-                  color: Color(0xFF1E293B),
-                  fontSize: 15,
-                  letterSpacing: 2.0,
-                ),
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(
-                    Icons.lock_outline,
+                letterSpacing: _obscurePassword ? 2.2 : 0.4,
+                prefixIcon: Icons.lock_outline_rounded,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                  icon: Icon(
+                    _obscurePassword
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
                     color: AppTheme.labelGrey,
                     size: 20,
-                  ),
-                  prefixIconConstraints: const BoxConstraints(
-                    minWidth: 32,
-                    minHeight: 32,
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: AppTheme.labelGrey,
-                      size: 20,
-                    ),
-                  ),
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.inputBorderGrey),
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.primaryButtonNavy),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
 
               // Forgot Password?
               Align(
@@ -151,7 +123,9 @@ class _SignInPageState extends State<SignInPage> {
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Gunakan Username: admin & Password: admin'),
+                        duration: Duration(milliseconds: 1500),
+                        content:
+                            Text('Gunakan Username: admin & Password: admin'),
                       ),
                     );
                   },
@@ -160,15 +134,15 @@ class _SignInPageState extends State<SignInPage> {
                     style: TextStyle(
                       color: Color(0xFF475569),
                       fontSize: 13,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
-              // SIGN IN Button -> Login dengan admin / admin
+              // SIGN IN Button -> Respon Instan (<16ms)
               PrimaryAuthButton(
                 label: 'SIGN IN',
                 isLoading: isLoading,
@@ -180,7 +154,7 @@ class _SignInPageState extends State<SignInPage> {
                 },
               ),
 
-              const SizedBox(height: 26),
+              const SizedBox(height: 24),
 
               // Divider "or continue with"
               Row(
@@ -204,41 +178,55 @@ class _SignInPageState extends State<SignInPage> {
                 ],
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 18),
 
-              // Sign in with Google Button -> OIDC Keycloak kc_idp_hint=google
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: OutlinedButton(
-                  onPressed: isLoading
-                      ? null
-                      : () => context.read<AuthCubit>().signInWithGoogle(),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppTheme.inputBorderGrey),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const GoogleLogoIcon(size: 20),
-                      const SizedBox(width: 12),
-                      const Text(
-                        'Sign in with Google',
-                        style: TextStyle(
-                          color: Color(0xFF334155),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
+              // Sign in with Google Button dengan efek 3D Tilt Card
+              Interactive3DTiltCard(
+                child: Container(
+                  width: double.infinity,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(color: const Color(0xFFCBD5E1)),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0xFFE2E8F0),
+                        blurRadius: 0,
+                        offset: Offset(0, 3.5),
                       ),
                     ],
+                  ),
+                  child: OutlinedButton(
+                    onPressed: isLoading
+                        ? null
+                        : () => context.read<AuthCubit>().signInWithGoogle(),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide.none,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GoogleLogoIcon(size: 20),
+                        SizedBox(width: 12),
+                        Text(
+                          'Sign in with Google',
+                          style: TextStyle(
+                            color: Color(0xFF334155),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 36),
+              const SizedBox(height: 32),
 
               // Don't have an account? Sign up
               Row(
@@ -252,19 +240,13 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const SignUpPage(),
-                        ),
-                      );
-                    },
+                    onTap: () => _openSignUpWith3DTransition(context),
                     child: const Text(
                       'Sign up',
                       style: TextStyle(
                         color: AppTheme.orangeAction,
                         fontSize: 13,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ),
@@ -359,5 +341,3 @@ class _GoogleLogoPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
-
-

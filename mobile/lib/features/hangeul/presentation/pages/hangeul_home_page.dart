@@ -50,7 +50,7 @@ class _HangeulHomePageState extends State<HangeulHomePage> {
     setState(() => _isSpeaking = true);
     await HangeulAudioService.speak(text, slow: slow);
     if (mounted) {
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 200));
       if (mounted) setState(() => _isSpeaking = false);
     }
   }
@@ -204,35 +204,53 @@ class _HangeulHomePageState extends State<HangeulHomePage> {
             ),
           ),
 
-          // 2. Konten Utama sesuai Menu yang Dipilih
+          // 2. Konten Utama sesuai Menu yang Dipilih (dengan Smooth Transition)
           Expanded(
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
-              child: _selectedCategoryIndex == 3
-                  ? const Topik1SectionView()
-                  : _selectedCategoryIndex == 4
-                      ? const KoreanDictionaryView()
-                      : Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Kartu Utama Penulisan & Suara Hangeul Ukuran Sangat Besar
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 22,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(28),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Column(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 180),
+                switchInCurve: Curves.easeOutCubic,
+                switchOutCurve: Curves.easeInCubic,
+                child: _selectedCategoryIndex == 3
+                    ? const Topik1SectionView(key: ValueKey('tab_topik1'))
+                    : _selectedCategoryIndex == 4
+                        ? const KoreanDictionaryView(key: ValueKey('tab_dict'))
+                        : Column(
+                            key: ValueKey(
+                                'tab_hangeul_${_selectedCategoryIndex}_$_selectedItemIndex'),
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              // Kartu Utama 3D Penulisan & Suara Hangeul Ukuran Sangat Besar
+                              Interactive3DTiltCard(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 22,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(28),
+                                    border: Border.all(
+                                      color: AppTheme.goldAccent
+                                          .withOpacity(0.35),
+                                      width: 1.4,
+                                    ),
+                                    boxShadow: [
+                                      const BoxShadow(
+                                        color: Color(0xFFCBD5E1),
+                                        blurRadius: 0,
+                                        offset: Offset(0, 4.5),
+                                      ),
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.08),
+                                        blurRadius: 22,
+                                        offset: const Offset(0, 10),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
                       children: [
                         // Tag Kategori + Tombol Coretan Tulis (Latihan Tulis)
                         Row(
@@ -638,16 +656,17 @@ class _HangeulHomePageState extends State<HangeulHomePage> {
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                               ),
-                              icon: const Text(
-                                'Selanjutnya',
-                                style: TextStyle(fontSize: 12.5),
+                                icon: const Text(
+                                  'Selanjutnya',
+                                  style: TextStyle(fontSize: 12.5),
+                                ),
+                                label: const Icon(Icons.arrow_forward_ios,
+                                    size: 14),
                               ),
-                              label: const Icon(Icons.arrow_forward_ios,
-                                  size: 14),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
 
@@ -756,6 +775,7 @@ class _HangeulHomePageState extends State<HangeulHomePage> {
                     },
                   ),
                 ],
+              ),
               ),
             ),
           ),

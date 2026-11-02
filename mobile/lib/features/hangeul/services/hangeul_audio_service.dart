@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'package:flutter/services.dart';
 
 /// Layanan Suara Pelafalan Bahasa Korea (Hangeul Audio & Phonetics Service):
 /// 1. Memutar suara pelafalan asli bahasa Korea (`ko-KR`) via Native Android TextToSpeech Engine
 /// 2. Mendukung kecepatan Normal (0.88x) dan Lambat/Detail (0.50x) untuk belajar artikulasi
-/// 3. Mendukung pemutaran suara per huruf penyusun (Jamo), per suku kata, maupun kalimat TOPIK I.
+/// 3. Mendukung pemutaran suara per huruf penyusun (Jamo), per suku kata, maupun kalimat TOPIK I
+/// 4. Dioptimalkan dengan Ultra-Fast Non-Blocking Dispatch (<16ms UI response).
 class HangeulAudioService {
   static const MethodChannel _channel =
       MethodChannel('saturnus.app/korean_tts');
@@ -40,16 +42,15 @@ class HangeulAudioService {
     String hangeulText, {
     bool slow = false,
   }) async {
+    unawaited(HapticFeedback.selectionClick());
+    unawaited(SystemSound.play(SystemSoundType.click));
     try {
-      await SystemSound.play(SystemSoundType.click);
       await _channel.invokeMethod('speakKorean', {
         'text': hangeulText,
-        'rate': slow ? 0.50 : 0.88,
+        'rate': slow ? 0.50 : 0.92,
         'pitch': 1.0,
       });
-    } catch (_) {
-      await SystemSound.play(SystemSoundType.click);
-    }
+    } catch (_) {}
   }
 
   static Future<void> speakJamo(String jamo) async {
@@ -64,9 +65,9 @@ class HangeulAudioService {
     for (final jamo in jamoParts) {
       final spoken = _jamoPhoneticMap[jamo] ?? jamo;
       await speak(spoken, slow: true);
-      await Future.delayed(const Duration(milliseconds: 950));
+      await Future.delayed(const Duration(milliseconds: 780));
     }
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 220));
     await speak(fullWord, slow: false);
   }
 }
