@@ -15,6 +15,7 @@ docker-compose.override.yml
 start-all.bat
 stop-all.bat
 run-mobile.bat
+push-github.bat
 
 # ============================================================================
 # 2. KEYSTORE ANDROID & SERTIFIKAT KEAMANAN (PRIVATE KEYS)
