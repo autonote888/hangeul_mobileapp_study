@@ -18,17 +18,24 @@
 
 ## 1. Fitur Utama Aplikasi
 
-### A. UI/UX Modern dengan Efek 3D Interaktif
+### A. UI/UX Modern dengan Efek 3D Interaktif & Ultra-Fast Response (`<16ms`)
 - **3D Cyber Icosahedron & Orbital Rings**: Animasi 3D *real-time* (60 FPS) tepat di belakang judul **`WELCOME BACK / HELLO SIGN IN`** yang dapat diputar secara interaktif dengan sentuhan jari (*touch & drag*).
+- **Shape 3D pada Bagian Isian (`Interactive3DInputField`)**:
+  - Setiap kolom input pada halaman **Sign In**, **Sign Up**, dan **Pencarian Kamus Korea** memiliki bentuk **3D Extruded Prism/Capsule** dengan *solid 3D bottom lip*, *floating ambient shadow*, *3D beveled icon cube*, serta ornamen kristal 3D *wireframe* (`_Mini3DPrismPainter`) yang berputar otomatis saat mengetik.
+- **Smooth 3D Perspective Transition Saat Digerakkan (`Interactive3DTiltCard`)**:
+  - Ketika jari menyentuh atau menggeser (*drag/move*) kolom isian maupun kartu utama Hangeul, elemen akan miring secara *real-time* mengikuti perspektif 3D (`Matrix4` *perspective tilt*) dan kembali ke posisi tengah dengan transisi *spring* yang sangat halus (`Curves.easeOutCubic`).
+- **Tingkat Kecepatan Respon Sangat Cepat (`<16ms` Instant UI Dispatch)**:
+  - **Login & Sign-Up Instan**: Transisi masuk ke beranda berlangsung seketika (`0ms` tanpa tertahan *timeout* jaringan) sembari menyinkronkan token OIDC Keycloak di latar belakang.
+  - **Logout Instan**: Klik tombol *Logout* langsung mengembalikan pengguna ke halaman `SignInPage` dengan mulus tanpa menutup aplikasi.
 - **Otentikasi Keycloak (`flutter-realm`) & Google Sign-In**:
   - Mendukung login langsung menggunakan akun Keycloak (`admin` / `admin`) maupun alur OIDC Authorization Code + PKCE (`flutter_appauth`).
   - Dilengkapi vektor resmi Logo Google 4-warna pada tombol **Sign in with Google**.
 
-### B. Modul Belajar Hangeul Korea & Kurikulum Khusus TOPIK I
-Setelah login berhasil, pengguna masuk ke dashboard **Belajar Tulis & Suara Hangeul** yang memiliki **4 Menu Utama**:
-1. **Angka (`일, 이, 삼...`)**: Angka Sino-Korea (`일` 1 s/d `십` 10) dan Angka Asli Korea (`하나` 1, `둘` 2).
-2. **Vokal (`아, 야, 어...`)**: 10 Vokal Dasar (`아, 야, 어, 여, 오, 요, 우, 유, 으, 이`) dan Vokal Gabungan/Diftong (`와`).
-3. **Latihan (`한글, 사랑...`)**: Kosakata & ungkapan penting sehari-hari (`한글`, `안녕`, `사랑`, `감사`, `친구`, `학교`).
+### B. Modul Belajar Hangeul Korea, Kurikulum TOPIK I & Kamus Lengkap Bahasa Korea
+Setelah login berhasil, pengguna masuk ke dashboard **Belajar Tulis & Suara Hangeul** yang memiliki **5 Menu Utama**:
+1. **Hangeul Angka (`일, 이, 삼...`)**: Angka Sino-Korea (`일` 1 s/d `십` 10) dan Angka Asli Korea (`하나` 1, `둘` 2).
+2. **Hangeul Vokal (`아, 야, 어...`)**: 10 Vokal Dasar (`아, 야, 어, 여, 오, 요, 우, 유, 으, 이`) dan Vokal Gabungan/Diftong (`와`).
+3. **Latihan Hangeul (`한글, 사랑...`)**: Kosakata & ungkapan penting sehari-hari (`한글`, `안녕`, `사랑`, `감사`, `친구`, `학교`).
 4. **TOPIK I (`문법 & 어휘`)**: Modul khusus persiapan ujian **TOPIK I (Level 1–2)** yang terbagi menjadi:
    - **Sub-Tab 1: Tata Bahasa Dasar (`문법 / Grammar`)**:
      - **Partikel Dasar (`조사`)**: Subjek/Topik (`은/는`, `이/가`), Objek (`을/를`), Lokasi/Waktu (`에`, `에서`), Arah & Alat/Metode (`(으)로`), Penambahan & Kepemilikan (`도`, `의`), Penghubung Kata Benda (`와/과`, `(이)랑`, `하고`), serta Batasan (`부터`, `까지`, `만`).
@@ -42,6 +49,10 @@ Setelah login berhasil, pengguna masuk ke dashboard **Belajar Tulis & Suara Hang
      - **Lokasi & Arah**: Atas/bawah (`위/아래`), depan/belakang (`앞/뒤`), dalam/luar (`안/밖`), kiri/kanan (`왼쪽/오른쪽`), stasiun (`역`), bandara (`공항`), pasar (`시장`), bank (`은행`), kantor pos (`우체국`), rumah sakit (`병원`).
      - **Aktivitas Harian**: Belanja (`쇼핑`), memesan di restoran (`식당`), hobi/olahraga (`취미/운동`), cuaca & 4 musim (`날씨/계절`: `봄, 여름, 가을, 겨울`).
      - **Transportasi**: Kereta bawah tanah (`지하철`), bus (`버스`), taksi (`택시`), transfer jalur (`환승`), naik/turun (`타다/내리다`).
+5. **Kamus Lengkap Bahasa Korea (`한국어 사전`)**:
+   - **Pencarian Instan 3-Arah**: Cari kosakata menggunakan aksara **Hangeul**, **Romaji**, maupun **Arti Bahasa Indonesia** dengan kotak pencarian berdesain **3D Shape**.
+   - **Filter Kelas Kata**: Semua, Ungkapan, Kata Kerja (`동사`), Kata Sifat (`형용사`), Kata Benda (`명사`), serta Kata Tanya & Keterangan (`부사/의문사`).
+   - **Detail Lengkap Setiap Entri**: Pemecahan huruf penyusun (*Jamo*), perubahan bentuk kalimat sopan (`-아/어요`), simbol fonetik IPA, contoh kalimat lengkap beserta terjemahannya, serta tombol suara pelafalan **Normal** & **Lambat**.
 
 ### C. Fitur Suara Pelafalan Korea (`ko-KR`) & Panduan Artikulasi Detail
 Setiap huruf dan kata Hangeul dilengkapi fitur audio interaktif menggunakan **Native Android Korean Text-To-Speech (`Locale.KOREAN`)**:
